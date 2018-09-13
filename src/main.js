@@ -2,8 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import routes from './router'
-import './cube-ui'
 import 'amfe-flexible'
+import './cube-ui'
 let store = require('./store')
 
 const router = new VueRouter({
