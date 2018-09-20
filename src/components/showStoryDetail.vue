@@ -1,23 +1,23 @@
 <template>
     <div class="show-story-detail">
         <div class="header">
-            <text class="cancel" @touchstart="cancel">返回</text>
-            <image @touchstart="jumpStoryEdit()" class="edit-icon" style="width:40px;height:40px" resize="contain" src="http://p4v45pf9g.bkt.clouddn.com/edit.png"></image>
+            <span class="cancel" @touchstart="cancel">返回</span>
+            <img @touchstart="jumpStoryEdit()" class="edit-icon" style="width:20px;height:20px" src="http://p4v45pf9g.bkt.clouddn.com/edit.png">
         </div>
         <div class="main">
-            <text class="title">{{title}}</text>
-            <div class="tags-box">
-                <text class="tag" v-for="tag in tags" :key="tag">{{tag}}</text>
+            <h2 class="title">{{title}}</h2>
+            <div class="tags-box" v-if="tags != null">
+                <span class="tag" v-for="tag in tags" :key="tag">{{tag}}</span>
             </div>
-            <text class="create-time">{{createTime}}</text>
+            <span class="create-time">{{createTime}}</span>
             <div class="big-line"></div>
             <div>
-                <text class="story-conten" v-if="character !== null">人物：{{character}}</text>
-                <text class="story-conten margin-top" v-if="background !== null">故事背景：{{background}}</text>
+                <div class="story-conten" v-if="character !== null">人物：{{character}}</div>
+                <div class="story-conten margin-top" v-if="background !== null">故事背景：{{background}}</div>
                 <div v-if="background !== null" class="">
-                    <text class="story-conten margin-top" v-for="(item, index) in event" :key="index">事件{{index + 1}}：{{item}}</text>
+                    <div class="story-conten margin-top" v-for="(item, index) in event" :key="index">事件{{index + 1}}：{{item}}</div>
                 </div>
-                <text class="story-conten">{{content}}</text>
+                <div class="story-conten">{{content}}</div>
             </div>
         </div>
     </div>
@@ -50,17 +50,7 @@ export default {
       this.$router.go(-1)
     },
     getStoryDetail (id) {
-      let fetchParams = {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        // credentials: 'include', // 将凭证也带上（例如cookies）
-        body: JSON.stringify({
-          id: id
-        })
-      }
-      fetch('/tellDream/getStoryDetail', fetchParams).then(response => response.json())
+      this.$httpFetch('/tellDream/getStoryDetail', {data: {id: id}})
         .then(data => {
           if (data.status === 1) {
             let result = data.result
@@ -93,48 +83,48 @@ export default {
     top 0
     left 0
     .main
-        padding 48px
-        margin 48px 48px
+        padding 24px
+        margin 24px 24px
         background rgba(255, 255, 255, .7)
-        border-radius 8px
-        shadow(4px, 4px, 6px)
+        border-radius 4px
+        shadow(2px, 2px, 3px)
         .story-conten
-            font-size 28px
+            font-size 14px
         .margin-top
-            margin-top 20px
+            margin-top 10px
         .big-line
-            height 4px
+            height 2px
             background  $super-light-gray
-            margin-top 40px
-            margin-bottom 40px
+            margin-top 10px
+            margin-bottom 10px
         .title
-            font-size 32px
+            font-size 16px
             color $black
             line-height 2
         .create-time
-            font-size 24px
+            font-size 12px
             color $light-gray
         .tags-box
             flex-direction row
             .tag
-                margin-right 10px
-                font-size 24px
+                margin-right 6px
+                font-size 12px
                 color $light-gray
     .header
+        display flex
         flex-direction row
         align-items center
         justify-content space-between
         background white
         shadow(0, 2px, 4px)
         .edit-icon
-            float right
-            margin-right 48px
+            margin-right 24px
         .cancel
             display inline-block
-            height 80px
-            width 80px
+            height 40px
+            width 40px
             box-sizing content-box
-            line-height 80px
-            padding 0 48px
-            font-size 28px
+            line-height 40px
+            padding 0 24px
+            font-size 14px
 </style>

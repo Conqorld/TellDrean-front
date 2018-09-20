@@ -7,39 +7,33 @@
         </Header>
         <Main>
             <div class="contents-box">
-                <div class="content-box" v-for="story in thisMonthData" :key="story.id" @touchstart="jumpStoryDetail(story)">
-                    <text class="h2">{{story.title}}</text>
-                    <div class="content">
-                        <text class="explain text" v-if="story.character">人物：{{story.character}}</text>
+                <div class="content-box" v-for="story in thisMonthData" :key="story.id" @click="jumpStoryDetail(story)">
+                    <h2 class="h2">{{story.title}}</h2>
+                    <div class="content" v-if="story.character">人物：{{story.character}}</div>
+                    <div class="back content" v-if="story.background">故事背景：{{story.background}}</div>
+                    <div class="event-content" v-if="story.event !== null" v-for="(ev, index) in story.event" :key="index">
+                        事件{{index+1}}：{{ev}}
                     </div>
-                    <div class="back content" v-if="story.background">
-                        <text lines="3" class="text">故事背景：{{story.background}}</text>
+                    <div class="content"  v-if="story.contents !== null">
+                        {{story.contents}}
                     </div>
-                    <div class="event-content" v-if="story.event !== null">
-                        <text lines="3" class="text" v-for="(ev, index) in story.event" :key="index">事件{{index+1}}：{{ev}}</text>
-                    </div>
-                    <div class="content">
-                        <text  lines="5" class="text">{{story.contents}}</text>
-                    </div>
-                    <div class="thin-line" style="margin:40px 0 20px 0"></div>
+                    <div class="thin-line" style="margin:20px 0 20px 0"></div>
                     <div class="bottom-info">
                         <div class="tags-box">
-                            <div class="del" @touchstart="delSubmit(story.id)">
-                                <text class="text">删</text>
-                            </div>
+                            <span class="del" @touchstart.stop="delSubmit(story.id)">删</span>
                             <div class="tag" v-for="(tag, index) in story.tag" :key="index">
-                                <text class="text">{{tag}}</text>
+                                <span class="text">{{tag}}</span>
                             </div>
                         </div>
-                        <text class="update-time">{{story.createTime / 1000|moment("YYYY-MM-DD")}}</text>
+                        <span class="update-time">{{story.createTime / 1000|moment("YYYY-MM-DD")}}</span>
                     </div>
                 </div>
-                <text class="no-more" v-if="thisMonthData.length > 0">已经没有更多了</text>
-                <text class="no-more thismonth-no-dream" v-if="thisMonthData.length <= 0">这个月还没有做梦哦~</text>
+                <div class="no-more" v-if="thisMonthData.length > 0">已经没有更多了</div>
+                <div class="no-more thismonth-no-dream" v-if="thisMonthData.length <= 0">这个月还没有做梦哦~</div>
             </div>
         </Main>
         <Footer>
-            <text class="add-button" @touchstart="isOpen = true">述</text>
+            <span class="add-button" @touchstart="isOpen = true">述</span>
         </Footer>
         <selectPublish v-model="isOpen"></selectPublish>
         <selectDate :originalMouth="currentMouth"
@@ -55,7 +49,6 @@
 <script>
 import SelectPublish from './SelectPublish'
 import SelectDate from './SelectDate'
-import HttpReq from '../utils/HttpRequest'
 export default {
   data () {
     return {
@@ -73,16 +66,15 @@ export default {
     selectDate: SelectDate
   },
   created () {
-    (async () => {
-      // let yearStore = await getStorage('yearStore')
-      // let mouthStore = await getStorage('mouthStore')
-      // if (yearStore.result !== 'failed' && mouthStore.result !== 'failed') {
-      //   this.currentYear = parseInt(yearStore.data)
-      //   this.currentMouth = parseInt(mouthStore.data)
-      // }
+      let mouthStore = this.$store.default.state.mouthStore
+      let yearStore = this.$store.default.state.yearStore
+      if (mouthStore !== null && yearStore !== null) {
+        this.currentYear = yearStore
+        this.currentMouth = mouthStore
+      }
       this.getMonthData(new Date(this.currentYear, this.currentMouth, 1), new Date(this.currentYear, this.currentMouth + 1, 0))
-      this.getMinMonth()
-    })()
+      this.getRangeMonth()
+
   },
   methods: {
     chooseDateCallBack (yaer, mouth) {
@@ -91,27 +83,34 @@ export default {
       this.currentMouth = mouth
     },
     jumpStoryDetail (story) {
-      // this.$store.default.dispatch('setDate', {year: this.currentYear, mouth: this.currentMouth})
-      // setStorage('yearStore', this.currentYear).then((res) => {
-      //   return setStorage('mouthStore', this.currentMouth)
-      // })
-      //   .then((res) => {
-          this.$router.push({name: 'showStoryDetail', query: { id: story.id }})
-        // })
+      this.$store.default.dispatch('setDate', {year: this.currentYear, mouth: this.currentMouth})
+      this.$router.push({name: 'showStoryDetail', query: { id: story.id }})
     },
     delSubmit (id) {
-      // modal.confirm({
-      //   message: '确认删除这个故事？',
-      //   okTitle: '删除',
-      //   cancelTitle: '再想想'
-      // }, res => {
-      //   if (res === '删除') {
-      //     this.delStory(id)
-      //   } else if (res === '差一点点') {}
-      // })
+
+      this.$createDialog({
+        type: 'confirm',
+        title: '确认删除这个故事？',
+        content: '',
+        confirmBtn: {
+          text: '删除',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '取消',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        onConfirm: () => {
+          this.delStory(id)
+        },
+      }).show()
     },
     delStory (id) {
-      HttpReq('/tellDream/deleteStory',
+      this.$httpFetch('/tellDream/deleteStory',
         {data: {id: id}})
         .then(data => {
           if (data.status === 1) {
@@ -120,7 +119,7 @@ export default {
         })
     },
     getMonthData (createTime, endTime) {
-      HttpReq('/tellDream/getStory', {data: {
+      this.$httpFetch('/tellDream/getStory', {data: {
         createTime: Date.parse(createTime) / 1000,
         endTime: Date.parse(endTime) / 1000
       }})
@@ -128,8 +127,8 @@ export default {
           this.thisMonthData = data
         })
     },
-    getMinMonth () {
-      HttpReq('/tellDream/getMinMouth')
+    getRangeMonth () {
+      this.$httpFetch('/tellDream/getMinMouth')
         .then(data => {
           this.minDate = data.minDate
           this.maxDate = data.maxDate
@@ -153,92 +152,91 @@ export default {
     Header
         width 100%
         position absolute
-        top .2rem
+        top 10px
         left 0
         .header-msg-box
-            height 1rem
+            height 36px
             width 90%
             margin 0 auto
             background rgba(255, 255, 255, .8)
-            border-radius 2rem
+            border-radius 36px
             text-align center
-            font-size .45rem
-            text-align center
-            line-height 1rem
+            font-size 18px
+            line-height 36px
     Main
-        height calc(100% - 100px)
+        height calc(100% - 96px)
         width 100%
-        margin-top 100px
-        padding 20px 0
+        margin-top 50px
+        padding 10px 0
+        overflow scroll
+        padding-bottom 60px
+        box-sizing border-box
         .contents-box
             width 90%
             margin 0 auto
             .no-more
-                height 80px
-                line-height 80px
-                font-size 28px
+                height 40px
+                line-height 40px
+                font-size 14px
                 background rgba(255, 255, 255, .9)
                 text-align center
                 border-radius 4px
                 color $light-gray
                 &.thismonth-no-dream
-                    height 240px
-                    line-height 240px
+                    height 120px
+                    line-height 120px
             .content-box
                 /*max-height 400px*/
                 background rgba(255, 255, 255, .9)
                 border-radius 4px
                 box-sizing border-box
-                padding 20px 30px 40px 30px
-                margin-bottom 40px
+                padding 10px 15px 20px 15px
+                margin-bottom 20px
                 .h2
-                    font-size 36px
+                    font-size 18px
                     line-height 2
                 .event-content
-                    margin-top 20px
-                    .text
-                        font-size 28px
+                    margin-top 10px
+                    font-size 14px
                     .content
-                        margin-bottom 10px
+                        margin-bottom 5px
                 .content
-                    font-size 28px
-                    .text
-                        font-size 28px
+                    font-size 14px
+                    line-height 1.6
                 .back
-                    margin-top 20px
+                    margin-top 10px
                 .bottom-info
                     display flex
                     flex-direction row
                     justify-content space-between
                     align-items center
+                    margin-top 30px
                     span
-                        font-size 24px
+                        font-size 12px
                         color $light-gray
                     .tags-box
-                        display display
+                        display flex
                         flex 1
                         align-items center
                         justify-content flex-start
                         flex-direction row
                         .del
-                            margin-right 16px
+                            margin-right 8px
                             display inline
-                            .text
-                                text-decoration line-through
-                                font-size 24px
-                                color $dark-bule
+                            text-decoration line-through
+                            font-size 12px
+                            color $dark-bule
                         .tag
-                            margin-right 10px
+                            margin-right 6px
                             display inline
-                            .text
-                                font-size 24px
+                            font-size 12px
                     .update-time
                         flex-shrink 0
-                        font-size 24px
+                        font-size 12px
                 .thin-line
                     position relative
                     border none
-                    margin 40px 0 20px 0
+                    margin 20px 0 10px 0
                     &:after
                         content ""
                         position absolute
@@ -255,20 +253,21 @@ export default {
         position absolute
         bottom 0
         left 0
-        height 100px
-        box-shadow 0 -4px 6px $shadow-gray
+        height 50px
+        box-shadow 0 -2px 3px $shadow-gray
         background white
         .add-button
-            height 86px
-            width 86px
-            margin 12px auto
+            display block
+            height 43px
+            width 43px
+            margin 3px auto
             border-radius 50%
             background rgba(101, 104, 209, 1)
             box-sizing border-box
-            border 4px solid $light-bule-green
-            font-size 36px
+            border 2px solid $light-bule-green
+            font-size 18px
             color $light-bule-green
             text-align center
-            line-height 82px
+            line-height 41px
             font-weight 600
 </style>

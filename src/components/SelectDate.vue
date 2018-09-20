@@ -2,35 +2,35 @@
     <div class="select-date" @touchstart.self="closePopou" v-show="value">
         <div class="content-box">
             <div class="header">
-                <text @touchstart="currentYear--" v-if="currentYear > minYear" class="text"> 《 </text>
-                <text v-if="currentYear <= minYear" class="text disabled"> 《 </text>
-                <text class="text">{{currentYear}}</text>
-                <text @touchstart="currentYear++" v-if="currentYear < maxYear" class="text"> 》 </text>
-                <text v-if="currentYear >= maxYear" class="text disabled"> 》 </text>
+                <span @touchstart="currentYear--" v-if="currentYear > minYear" class="text"> 《 </span>
+                <span v-if="currentYear <= minYear" class="text disabled"> 《 </span>
+                <span class="text">{{currentYear}}</span>
+                <span @touchstart="currentYear++" v-if="currentYear < maxYear" class="text"> 》 </span>
+                <span v-if="currentYear >= maxYear" class="text disabled"> 》 </span>
             </div>
             <div class="mouth-box">
                 <div class="mouth-line">
-                    <div @touchstart="defaultMouth = 0" :class="defaultMouth == 0?'every-mouth active':'every-mouth'"><text class="text">1月</text></div>
-                    <div @touchstart="defaultMouth = 1" :class="defaultMouth == 1?'every-mouth active':'every-mouth'"><text class="text">2月</text></div>
-                    <div @touchstart="defaultMouth = 2" :class="defaultMouth == 2?'every-mouth active':'every-mouth'"><text class="text">3月</text></div>
-                    <div @touchstart="defaultMouth = 3" :class="defaultMouth == 3?'every-mouth active':'every-mouth'"><text class="text">4月</text></div>
+                    <div @touchstart="defaultMouth = 0" :class="defaultMouth == 0?'every-mouth active':'every-mouth'">1月</div>
+                    <div @touchstart="defaultMouth = 1" :class="defaultMouth == 1?'every-mouth active':'every-mouth'">2月</div>
+                    <div @touchstart="defaultMouth = 2" :class="defaultMouth == 2?'every-mouth active':'every-mouth'">3月</div>
+                    <div @touchstart="defaultMouth = 3" :class="defaultMouth == 3?'every-mouth active':'every-mouth'">4月</div>
                 </div>
                 <div class="mouth-line">
-                    <div @touchstart="defaultMouth = 4" :class="defaultMouth == 4?'every-mouth active':'every-mouth'"><text class="text">5月</text></div>
-                    <div @touchstart="defaultMouth = 5" :class="defaultMouth == 5?'every-mouth active':'every-mouth'"><text class="text">6月</text></div>
-                    <div @touchstart="defaultMouth = 6" :class="defaultMouth == 6?'every-mouth active':'every-mouth'"><text class="text">7月</text></div>
-                    <div @touchstart="defaultMouth = 7" :class="defaultMouth == 7?'every-mouth active':'every-mouth'"><text class="text">8月</text></div>
+                    <div @touchstart="defaultMouth = 4" :class="defaultMouth == 4?'every-mouth active':'every-mouth'">5月</div>
+                    <div @touchstart="defaultMouth = 5" :class="defaultMouth == 5?'every-mouth active':'every-mouth'">6月</div>
+                    <div @touchstart="defaultMouth = 6" :class="defaultMouth == 6?'every-mouth active':'every-mouth'">7月</div>
+                    <div @touchstart="defaultMouth = 7" :class="defaultMouth == 7?'every-mouth active':'every-mouth'">8月</div>
                 </div>
                 <div class="mouth-line">
-                    <div @touchstart="defaultMouth = 8" :class="defaultMouth == 8?'every-mouth active':'every-mouth'"><text class="text">9月</text></div>
-                    <div @touchstart="defaultMouth = 9" :class="defaultMouth == 9?'every-mouth active':'every-mouth'"><text class="text">10月</text></div>
-                    <div @touchstart="defaultMouth = 10" :class="defaultMouth == 10?'every-mouth active':'every-mouth'"><text class="text">11月</text></div>
-                    <div @touchstart="defaultMouth = 11" :class="defaultMouth == 11?'every-mouth active':'every-mouth'"><text class="text">12月</text></div>
+                    <div @touchstart="defaultMouth = 8" :class="defaultMouth == 8?'every-mouth active':'every-mouth'">9月</div>
+                    <div @touchstart="defaultMouth = 9" :class="defaultMouth == 9?'every-mouth active':'every-mouth'">10月</div>
+                    <div @touchstart="defaultMouth = 10" :class="defaultMouth == 10?'every-mouth active':'every-mouth'">11月</div>
+                    <div @touchstart="defaultMouth = 11" :class="defaultMouth == 11?'every-mouth active':'every-mouth'">12月</div>
                 </div>
             </div>
             <div class="footer">
-                <div class="btn cancel" @touchstart="cancel"><text class="text">取消</text></div>
-                <div class="btn confirm" @touchstart="confirm"><text class="text">确定</text></div>
+                <div class="btn cancel" @touchstart="cancel">取消</div>
+                <div class="btn confirm" @touchstart="confirm">确定</div>
             </div>
         </div>
     </div>
@@ -90,54 +90,51 @@ export default {
         left 0
         .content-box
             background white
-            padding 40px 60px 20px 60px
-            height 500px
+            padding 20px 30px 10px 30px
+            height 250px
             shadow(2px, 4px, 8px)
             .mouth-box
                 .mouth-line
+                    display flex
                     flex-direction row
                     justify-content space-around
                     /*margin-bottom 20px*/
                     .every-mouth
-                        width 80px
-                        height 80px
+                        width 40px
+                        height 40px
                         border-radius 50%
-                        &.active
-                            background $pink
-                            .text
-                                color white
-                    .text
-                        line-height 80px
-                        font-size 28px
+                        line-height 40px
+                        font-size 14px
                         text-align center
                         color $pink
+                        &.active
+                            background $pink
+                            color white
             .footer
+                display flex
                 flex-direction row
                 justify-content center
-                margin-top 40px
+                margin-top 30px
                 .btn
-                    width 120px
-                    border-radius 8px
+                    width 60px
+                    border-radius 4px
                     border 1px solid $pink
-                    padding 8px
-                    margin 0 20px
-                    .text
-                        font-size 28px
-                        text-align center
+                    padding 4px
+                    margin 0 10px
+                    font-size 14px
+                    text-align center
                     &.cancel
-                        .text
-                            color $pink
+                        color $pink
                     &.confirm
                         background $pink
-                        .text
-                            color white
+                        color white
             .header
                 flex-direction row
                 justify-content space-around
                 text-align center
-                margin-bottom 40px
+                margin-bottom 20px
                 .text
-                    font-size 32px
+                    font-size 16px
                     color $pink
                     &.disabled
                         color $super-light-gray

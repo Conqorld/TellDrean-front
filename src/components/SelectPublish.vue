@@ -2,11 +2,11 @@
     <div class="select-publish" v-show="value">
         <div class="content-box">
             <div class="public-content-box">
-                <text class="round bule" @touchstart="jumpCreate('createPlotStory')">剧情</text>
-                <text class="round pink" @touchstart="jumpCreate('createStory')">普通</text>
+                <div class="round bule" @touchstart="jumpCreate('createPlotStory')">剧情</div>
+                <div class="round pink" @touchstart="jumpCreate('createStory')">普通</div>
             </div>
             <div class="close-box" @touchstart="closePopou">
-                <text class="text">x</text>
+                x
             </div>
         </div>
     </div>
@@ -61,24 +61,23 @@ export default {
             flex-direction row
             justify-content space-around
             align-items center
-            padding 60px 0
+            padding 30px 0
             .round
-                height 240px
-                width 240px
-                line-height 240px
+                height 120px
+                width 120px
+                line-height 120px
                 text-align center
                 border-radius 50%
                 color white
-                font-size 80px
+                font-size 40px
                 &.bule
                     background $dark-bule
                 &.pink
                     background $pink
         .close-box
-            height 240px
+            height 120px
             color $light-gray
-            .text
-                line-height 240px
-                text-align center
-                font-size 64px
+            line-height 120px
+            text-align center
+            font-size 32px
 </style>

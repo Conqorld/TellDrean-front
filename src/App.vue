@@ -16,7 +16,11 @@
       },
     created () {
       bus.$on('openPrompt', (text) => {
-        console.log(text)
+        const toast = this.$createToast({
+          time: 2000,
+          txt: text
+        })
+        toast.show()
       })
     }
   }

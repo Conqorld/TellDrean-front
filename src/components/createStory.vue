@@ -4,11 +4,11 @@
             <span class="cancel" @touchstart="cancel">取消</span>
         </div>
         <div class="Main">
-            <div class="content-line">
+            <div class="content-line border-bottom-line">
                 <input v-model="title" type="text" class="content-input" placeholder="标题"/>
             </div>
-            <div class="content-line">
-                <text class="content-input"  @touchstart="pickDate">{{value}}</text>
+            <div class="content-line border-bottom-line">
+                <div class="content-input" @touchstart="pickDate">{{value|moment("YYYY-MM-DD")}}</div>
             </div>
             <div class="content-line last-line shadow-box">
                 <textarea v-model="content" class="content-textarea" placeholder="内容"></textarea>
@@ -30,11 +30,12 @@ export default {
   name: 'createStory',
   data () {
     return {
-      value: this.$moment(new Date()).format('YYYY-MM-DD'),
+      value: new Date(),
       title: null,
       content: null,
       tag: null,
-      id: this.$route.query.id
+      id: this.$route.query.id,
+      datePicker: null
     }
   },
   methods: {
@@ -44,17 +45,25 @@ export default {
     submit () {
       let str = this.tag ? this.tag.replace(/\s+/g, '').split('，') : null
       if (!this.title) {
-        alert({message: '请输入标题！'})
+        this.$createDialog({
+          type: 'alert',
+          title: '请输入标题！',
+          icon: 'cubeic-warm'
+        }).show()
         return false
       }
       if (str && str.length > 3) {
-        alert({message: '标签最多只能有三个！'})
+        this.$createDialog({
+          type: 'alert',
+          title: '标签最多只能有三个！',
+          icon: 'cubeic-warm'
+        }).show()
         return false
       }
       let params = {
         title: this.title,
         content: this.content,
-        createTime: this.$moment(new Date()).format('YYYY-MM-DD') === this.$moment(this.value).format('YYYY-MM-DD') ? Date.parse(new Date(this.value + ' ' + this.$moment(new Date()).format('HH:mm:ss'))) : Date.parse(new Date(this.value + ' ' + '08:00:00')),
+        createTime: this.$moment(new Date()).format('YYYY-MM-DD') === this.$moment(this.value).format('YYYY-MM-DD') ? Date.parse(new Date()) : Date.parse(new Date(this.$moment(this.value).format('YYYY-MM-DD')+ ' ' + '08:00:00')),
         tag: str,
         type: 'normal'
       }
@@ -65,46 +74,43 @@ export default {
         url = '/tellDream/upDateStory'
         msg = '修改成功!'
       }
-      let fetchParams = {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        // credentials: 'include', // 将凭证也带上（例如cookies）
-        body: JSON.stringify(params)
-      }
-      fetch(url, fetchParams).then(response => response.json())
+      this.$httpFetch(url, {data: params})
         .then(data => {
           if (data.status === 1) {
             bus.$emit('openPrompt', msg)
+            this.$store.default.dispatch('setDate', {year: new Date(this.value).getFullYear(), mouth: new Date(this.value).getMonth()})
             window.setTimeout(() => {
               this.$router.push({name: 'Home'})
-            }, 500)
+            }, 1000)
           }
         })
     },
     pickDate () {
-
-    },
-    getStoryDetail (id) {
-      let fetchParams = {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        // credentials: 'include', // 将凭证也带上（例如cookies）
-        body: JSON.stringify({
-          id: id
+      if (!this.datePicker) {
+        this.datePicker = this.$createDatePicker({
+          title: '选择日期',
+          min: new Date(2008, 7, 8),
+          max: new Date(),
+          value: this.value,
+          onSelect: this.selectHandle,
+          maskClosable: false
         })
       }
-      fetch('/tellDream/getStoryDetail', fetchParams).then(response => response.json())
+
+      this.datePicker.show()
+    },
+    selectHandle(date) {
+      this.value = date
+    },
+    getStoryDetail (id) {
+      this.$httpFetch('/tellDream/getStoryDetail', {data: {id: id}})
         .then(data => {
           if (data.status === 1) {
             let result = data.result
-            this.value = this.$moment(new Date(result.createTime)).format('YYYY-MM-DD')
+            this.value = new Date(result.createTime)
             this.title = result.title
             this.content = result.contents
-            this.tag = result.tag.join('，')
+            this.tag = result.tag?result.tag.join('，'):null
           }
         })
     }
@@ -128,56 +134,67 @@ export default {
     left 0
     background $super-light-gray
     .shadow-box
-        box-shadow 0 4px 6px $shadow-gray
+        box-shadow 0 2px 3px $shadow-gray
     .Main
         background white
         .tag-line
             &:after
-                height: 20px
+                height: 10px
                 background $super-light-gray
         .content-line
-            padding 0 48px
-            border-bottom 3px solid $super-light-gray
+            padding 0 24px
+            &.border-bottom-line
+                border-bottom 3px solid $super-light-gray
             &.tag
-                border-top 20px
-                height 90px
+                border-top 10px
+                padding-top 4px
+                padding-bottom 4px
                 .content-input
-                    top 16px
+                    top 8px
+                    width 100%
             &.last-line
                 margin-bottom 2px
             .content-input
-                height 72px
-                line-height 72px
-                font-size 28px
+                height 36px
+                line-height 36px
+                font-size 14px
                 color $black
                 background white
+                width 100%
+                &:focus
+                    border none
+                    outline none
             .content-textarea
-                padding 20px 0
-                height 520px
-                font-size 28px
+                padding 10px 0
+                height 260px
+                font-size 14px
                 color $black
+                width 100%
+                &:focus
+                    border none
+                    outline none
                 &:disabled
                     background white
     .footer
         position fixed
-        height 100px
-        line-height 100px
+        height 50px
+        line-height 50px
         width 100%
         text-align center
-        font-size 32px
+        font-size 16px
         bottom 0
         left 0
-        box-shadow 0 -4px 6px $shadow-gray
+        box-shadow 0 -2px 3px $shadow-gray
         color white
         background $blue-green
     .header
-        height 80px
+        height 40px
         border-bottom 1px solid #aab8a3
         background $super-light-gray
         .cancel
-            height 80px
-            line-height 80px
+            height 40px
+            line-height 40px
             display inline-block
-            padding 0 48px
-            font-size 28px
+            padding 0 24px
+            font-size 14px
 </style>
