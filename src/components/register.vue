@@ -116,6 +116,14 @@
                 this.$router.push({name: 'Home'})
               }, 1000)
             })
+            .catch(err => {
+              const toast3 = this.$createToast({
+                time: 1000,
+                txt: err.err,
+                type: 'error'
+              })
+              toast3.show()
+            })
         })()
       },
     }
