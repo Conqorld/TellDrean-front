@@ -84,6 +84,13 @@ export default {
             }, 1000)
           }
         })
+        .catch(err => {
+          this.$createDialog({
+            type: 'alert',
+            title: err.err,
+            icon: 'cubeic-warm'
+          }).show()
+        })
     },
     pickDate () {
       if (!this.datePicker) {
