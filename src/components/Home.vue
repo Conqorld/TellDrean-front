@@ -140,14 +140,15 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
 @import "../assets/style/base.styl"；
 #home
-    height 100vh
-    width 100vw
+    height 100%
+    width 100%
     display flex
     position fixed
     left 0
     top 0
-    background url("http://pdleo6j6h.bkt.clouddn.com/HomeBack.jpg")
+    background url("../assets/imgs/HomeBack.jpg")
     background-size cover
+    background-position center
     background-repeat no-repeat
     Header
         width 100%
