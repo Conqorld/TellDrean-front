@@ -13,7 +13,7 @@
       }
     },
     methods: {
-      },
+    },
     created () {
       bus.$on('openPrompt', (text) => {
         const toast = this.$createToast({
@@ -27,5 +27,4 @@
 </script>
 
 <style scoped>
-
 </style>
