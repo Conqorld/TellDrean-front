@@ -185,9 +185,9 @@ export default {
             overflow-y scroll
             background white
             .add-content
-                height 30px
+                height 40px
                 text-align center
-                line-height 30px
+                line-height 40px
                 font-size 14px
                 color $blue-green
             .big-line
@@ -204,8 +204,8 @@ export default {
                 .content-textarea
                     flex 1
                 .substruction
-                    height 75px
-                    line-height 75px
+                    height 120px
+                    line-height 120px
                     width 30px
                     margin-right -24px
                     background $light-gray
@@ -234,7 +234,7 @@ export default {
                         outline none
                 .content-textarea
                     padding 10px 0
-                    height 75px
+                    height 120px
                     font-size 14px
                     color $black
                     box-sizing border-box
