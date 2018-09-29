@@ -2,7 +2,7 @@
     <div class="show-story-detail">
         <div class="header">
             <span class="cancel" @touchstart="cancel">返回</span>
-            <img @touchstart="jumpStoryEdit()" class="edit-icon" style="width:20px;height:20px" src="http://p4v45pf9g.bkt.clouddn.com/edit.png">
+            <img v-if="isUser" @touchstart="jumpStoryEdit()" class="edit-icon" style="width:20px;height:20px" src="http://p4v45pf9g.bkt.clouddn.com/edit.png">
         </div>
         <div class="main">
             <h2 class="title">{{title}}</h2>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Cookie from 'js-cookie'
 export default {
   name: 'showStoryDetail',
   data () {
@@ -35,7 +36,8 @@ export default {
       tags: '',
       background: null,
       character: null,
-      event: null
+      event: null,
+      isUser: true
     }
   },
   methods: {
@@ -52,17 +54,15 @@ export default {
     getStoryDetail (id) {
       this.$httpFetch('/tellDream/getStoryDetail', {data: {id: id}})
         .then(data => {
-          if (data.status === 1) {
-            let result = data.result
-            this.createTime = this.$moment(new Date(result.createTime)).format('YYYY-MM-DD')
-            this.title = result.title
-            this.content = result.contents
-            this.tags = result.tag
-            this.background = result.background
-            this.character = result.character
-            this.event = result.event
-            this.type = result.type
-          }
+            this.createTime = this.$moment(new Date(data.createTime)).format('YYYY-MM-DD')
+            this.title = data.title
+            this.content = data.contents
+            this.tags = data.tag
+            this.background = data.background
+            this.character = data.character
+            this.event = data.event
+            this.type = data.type
+            this.isUser = data.isUser
         })
     }
   },
