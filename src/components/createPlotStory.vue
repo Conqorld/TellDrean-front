@@ -96,10 +96,11 @@ export default {
         }).show()
         return false
       }
+      let isToday = this.$moment(new Date()).format('YYYY-MM-DD') === this.$moment(this.value).format('YYYY-MM-DD')
       let params = {
         title: this.title,
         event: this.content,
-        createTime: this.$moment(new Date()).format('YYYY-MM-DD') === this.$moment(this.value).format('YYYY-MM-DD') ? Date.parse(new Date()) : Date.parse(new Date(this.$moment(this.value).format('YYYY-MM-DD')+ ' ' + '08:00:00')),
+        createTime: isToday ? Date.parse(new Date()) : Date.parse(new Date(this.value)),
         tag: str,
         background: this.background,
         character: this.character,
@@ -180,7 +181,7 @@ export default {
             box-shadow 0 2px 3px $shadow-gray
             margin-bottom 2px
         .Main
-            max-height calc(100vh - 180px)
+            max-height calc(100% - 90px)
             overflow-y scroll
             background white
             .add-content

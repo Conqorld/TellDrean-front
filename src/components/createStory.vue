@@ -60,10 +60,11 @@ export default {
         }).show()
         return false
       }
+      let isToday = this.$moment(new Date()).format('YYYY-MM-DD') === this.$moment(this.value).format('YYYY-MM-DD')
       let params = {
         title: this.title,
         content: this.content,
-        createTime: this.$moment(new Date()).format('YYYY-MM-DD') === this.$moment(this.value).format('YYYY-MM-DD') ? Date.parse(new Date()) : Date.parse(new Date(this.$moment(this.value).format('YYYY-MM-DD')+ ' ' + '08:00:00')),
+        createTime: isToday ? Date.parse(new Date()) : Date.parse( new Date(this.value)),
         tag: str,
         type: 'normal'
       }

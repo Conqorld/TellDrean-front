@@ -80,16 +80,20 @@ export default {
     position fixed
     height 100%
     width 100%
+    overflow-y scroll
+    -webkit-overflow-scrolling touch
     top 0
     left 0
     .main
         padding 24px
         margin 24px 24px
+        margin-top 64px
         background rgba(255, 255, 255, .7)
         border-radius 4px
         shadow(2px, 2px, 3px)
         .story-conten
             font-size 14px
+            line-height 1.6
         .margin-top
             margin-top 10px
         .big-line
@@ -111,6 +115,10 @@ export default {
                 font-size 12px
                 color $light-gray
     .header
+        position fixed
+        width 100%
+        top 0
+        left 0
         display flex
         flex-direction row
         align-items center

@@ -9,12 +9,12 @@
             <div class="contents-box">
                 <div class="content-box" v-for="story in thisMonthData" :key="story.id" @click="jumpStoryDetail(story)">
                     <h2 class="h2">{{story.title}}</h2>
-                    <div class="content" v-if="story.character">人物：{{story.character}}</div>
-                    <div class="back content" v-if="story.background">故事背景：{{story.background}}</div>
-                    <div class="event-content" v-if="story.event !== null" v-for="(ev, index) in story.event" :key="index">
+                    <div class="content content-else" style="-webkit-box-orient: vertical;" v-if="story.character">人物：{{story.character}}</div>
+                    <div class="back content content-else" style="-webkit-box-orient: vertical;" v-if="story.background">故事背景：{{story.background}}</div>
+                    <div class="event-content content content-text" v-if="story.event !== null" v-for="(ev, index) in story.event" :key="index">
                         事件{{index+1}}：{{ev}}
                     </div>
-                    <div class="content"  v-if="story.contents !== null">
+                    <div class="content content-text" style="-webkit-box-orient: vertical;"  v-if="story.contents !== null">
                         {{story.contents}}
                     </div>
                     <div class="thin-line" style="margin:20px 0 20px 0"></div>
@@ -146,7 +146,7 @@ export default {
     position fixed
     left 0
     top 0
-    background url("../assets/imgs/HomeBack.jpg")
+    background url("http://p4v45pf9g.bkt.clouddn.com/HomeBack.jpg")
     background-size cover
     background-position center
     background-repeat no-repeat
@@ -172,6 +172,7 @@ export default {
         overflow scroll
         padding-bottom 60px
         box-sizing border-box
+        -webkit-overflow-scrolling touch
         .contents-box
             width 90%
             margin 0 auto
@@ -204,6 +205,21 @@ export default {
                 .content
                     font-size 14px
                     line-height 1.6
+                .content-text
+                    display -webkit-box
+                    -webkit-box-orient vertical
+                    -webkit-line-clamp 5
+                    overflow hidden
+                    text-overflow ellipsis
+                    white-space normal
+                .content-else
+                    display -webkit-box
+                    -webkit-box-orient vertical
+                    -webkit-line-clamp 3
+                    overflow hidden
+                    text-overflow ellipsis
+                    white-space normal
+                    word-wrap break-word
                 .back
                     margin-top 10px
                 .bottom-info
