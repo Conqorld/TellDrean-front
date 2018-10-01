@@ -27,8 +27,8 @@
                 <input v-model="tag" style="border-bottom: none" type="text" class="content-input" placeholder="#添加标签，多个标签用逗号分隔"/>
             </div>
         </div>
-        <div class="footer" @touchstart="submit">
-            发&emsp;布
+        <div v-show="isUser" class="footer" @touchstart="submit">
+            {{id?'修&emsp;改':'发&emsp;布'}}
         </div>
     </div>
 </template>
@@ -46,7 +46,8 @@ export default {
       id: this.$route.query.id,
       character: null,
       background: null,
-      datePicker: null
+      datePicker: null,
+      isUser: true
     }
   },
   methods: {
@@ -146,16 +147,14 @@ export default {
     getStoryDetail (id) {
       this.$httpFetch('/tellDream/getStoryDetail', {data: {id: id}})
         .then(data => {
-          if (data.status === 1) {
-            let result = data.result
-            this.value = new Date(result.createTime)
-            this.title = result.title
-            this.content = result.contents
-            this.tag = result.tag?result.tag.join('，'):null
-            this.background = result.background
-            this.character = result.character
-            this.content = result.event
-          }
+          this.value = new Date(data.createTime)
+          this.title = data.title
+          this.content = data.contents
+          this.tag = data.tag?data.tag.join('，'):null
+          this.background = data.background
+          this.character = data.character
+          this.content = data.event
+          this.isUser = data.isUser
         })
     }
   },
