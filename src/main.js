@@ -3,7 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import routes from './router'
 import 'amfe-flexible'
-import {Style, Button, Input, Textarea, Form, Toast, Picker, Dialog, DatePicker} from 'cube-ui'
+import {Style, Button, Input, Textarea, Form, Toast, Picker, Dialog, DatePicker, Scroll} from 'cube-ui'
 import HttpFtch from './utils/useHttp'
 import Cookie from 'js-cookie'
 
@@ -29,6 +29,7 @@ Vue.use(Toast)
 Vue.use(Picker)
 Vue.use(Dialog)
 Vue.use(DatePicker)
+Vue.use(Scroll)
 Vue.config.productionTip = false
 Vue.use(require('vue-moment'))
 new Vue({

@@ -4,27 +4,28 @@
             <span class="cancel" @touchstart="cancel">返回</span>
             <img v-if="isUser" @touchstart="jumpStoryEdit()" class="edit-icon" style="width:20px;height:20px" src="http://p4v45pf9g.bkt.clouddn.com/edit.png">
         </div>
-        <div class="main">
-            <h2 class="title">{{title}}</h2>
-            <div class="tags-box" v-if="tags != null">
-                <span class="tag" v-for="tag in tags" :key="tag">{{tag}}</span>
-            </div>
-            <span class="create-time">{{createTime}}</span>
-            <div class="big-line"></div>
-            <div>
-                <div class="story-conten" v-if="character !== null">人物：{{character}}</div>
-                <div class="story-conten margin-top" v-if="background !== null">故事背景：{{background}}</div>
-                <div v-if="background !== null" class="">
-                    <div class="story-conten margin-top" v-for="(item, index) in event" :key="index">事件{{index + 1}}：{{item}}</div>
+        <cube-scroll ref="scroll">
+            <div class="main">
+                <h2 class="title">{{title}}</h2>
+                <div class="tags-box" v-if="tags != null">
+                    <span class="tag" v-for="tag in tags" :key="tag">{{tag}}</span>
                 </div>
-                <div class="story-conten">{{content}}</div>
+                <span class="create-time">{{createTime}}</span>
+                <div class="big-line"></div>
+                <div>
+                    <div class="story-conten" v-if="character !== null">人物：{{character}}</div>
+                    <div class="story-conten margin-top" v-if="background !== null">故事背景：{{background}}</div>
+                    <div v-if="background !== null" class="">
+                        <div class="story-conten margin-top" v-for="(item, index) in event" :key="index">事件{{index + 1}}：{{item}}</div>
+                    </div>
+                    <div class="story-conten">{{content}}</div>
+                </div>
             </div>
-        </div>
+        </cube-scroll>
     </div>
 </template>
 
 <script>
-import Cookie from 'js-cookie'
 export default {
   name: 'showStoryDetail',
   data () {
@@ -37,7 +38,12 @@ export default {
       background: null,
       character: null,
       event: null,
-      isUser: true
+      isUser: true,
+      pullDownY: 0,
+      pullDownStyle: '',
+      opacityStyle: '',
+      triggerSurpriseFlag: false,
+      triggerSurprise: false
     }
   },
   methods: {
@@ -80,14 +86,16 @@ export default {
     position fixed
     height 100%
     width 100%
+    display flex
+    flex-direction column
     overflow-y scroll
     -webkit-overflow-scrolling touch
     top 0
     left 0
     .main
+        flex 1
         padding 24px
         margin 24px 24px
-        margin-top 64px
         background rgba(255, 255, 255, .7)
         border-radius 4px
         shadow(2px, 2px, 3px)
@@ -115,10 +123,7 @@ export default {
                 font-size 12px
                 color $light-gray
     .header
-        position fixed
         width 100%
-        top 0
-        left 0
         display flex
         flex-direction row
         align-items center
