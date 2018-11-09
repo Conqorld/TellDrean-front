@@ -169,12 +169,11 @@ export default {
         flex 1
         flex-shrink 0
         width 100%
-        padding 10px 0 0 0
-        margin-bottom 10px
-        height calc(100% - 116px)
+        height calc(100% - 96px)
         .contents-box
             width 90%
             margin 0 auto
+            padding 10px 0
             .no-more
                 height 40px
                 line-height 40px
