@@ -6,31 +6,33 @@
             </div>
         </Header>
         <Main>
-            <div class="contents-box">
-                <div class="content-box" v-for="story in thisMonthData" :key="story.id" @click="jumpStoryDetail(story)">
-                    <h2 class="h2">{{story.title}}</h2>
-                    <div class="content content-else" style="-webkit-box-orient: vertical;" v-if="story.character">人物：{{story.character}}</div>
-                    <div class="back content content-else" style="-webkit-box-orient: vertical;" v-if="story.background">故事背景：{{story.background}}</div>
-                    <div class="event-content content content-text" v-if="story.event !== null" v-for="(ev, index) in story.event" :key="index">
-                        事件{{index+1}}：{{ev}}
-                    </div>
-                    <div class="content content-text" style="-webkit-box-orient: vertical;"  v-if="story.contents !== null">
-                        {{story.contents}}
-                    </div>
-                    <div class="thin-line" style="margin:20px 0 20px 0"></div>
-                    <div class="bottom-info">
-                        <div class="tags-box">
-                            <span class="del" @touchstart.stop="delSubmit(story.id)">删</span>
-                            <div class="tag" v-for="(tag, index) in story.tag" :key="index">
-                                <span class="text">{{tag}}</span>
-                            </div>
+            <cube-scroll ref="scroll">
+                <div class="contents-box">
+                    <div class="content-box" v-for="story in thisMonthData" :key="story.id" @click="jumpStoryDetail(story)">
+                        <h2 class="h2">{{story.title}}</h2>
+                        <div class="content content-else" style="-webkit-box-orient: vertical;" v-if="story.character">人物：{{story.character}}</div>
+                        <div class="back content content-else" style="-webkit-box-orient: vertical;" v-if="story.background">故事背景：{{story.background}}</div>
+                        <div class="event-content content content-text" v-if="story.event !== null" v-for="(ev, index) in story.event" :key="index">
+                            事件{{index+1}}：{{ev}}
                         </div>
-                        <span class="update-time">{{story.createTime / 1000|moment("YYYY-MM-DD")}}</span>
+                        <div class="content content-text" style="-webkit-box-orient: vertical;"  v-if="story.contents !== null">
+                            {{story.contents}}
+                        </div>
+                        <div class="thin-line" style="margin:20px 0 20px 0"></div>
+                        <div class="bottom-info">
+                            <div class="tags-box">
+                                <span class="del" @touchstart.stop="delSubmit(story.id)">删</span>
+                                <div class="tag" v-for="(tag, index) in story.tag" :key="index">
+                                    <span class="text">{{tag}}</span>
+                                </div>
+                            </div>
+                            <span class="update-time">{{story.createTime / 1000|moment("YYYY-MM-DD")}}</span>
+                        </div>
                     </div>
+                    <div class="no-more" v-if="thisMonthData.length > 0">已经没有更多了</div>
+                    <div class="no-more thismonth-no-dream" v-if="thisMonthData.length <= 0">这个月还没有做梦哦~</div>
                 </div>
-                <div class="no-more" v-if="thisMonthData.length > 0">已经没有更多了</div>
-                <div class="no-more thismonth-no-dream" v-if="thisMonthData.length <= 0">这个月还没有做梦哦~</div>
-            </div>
+            </cube-scroll>
         </Main>
         <Footer>
             <span class="add-button" @touchstart="isOpen = true">述</span>
@@ -43,7 +45,6 @@
                 :maxYear="new Date(this.maxDate).getFullYear()"
                 :chooseDateCallBack="chooseDateCallBack">
         </selectDate>
-
     </div>
 </template>
 <script>
@@ -143,6 +144,8 @@ export default {
     height 100%
     width 100%
     display flex
+    flex-direction column
+    justify-items space-between
     position fixed
     left 0
     top 0
@@ -151,10 +154,7 @@ export default {
     background-position center
     background-repeat no-repeat
     Header
-        width 100%
-        position absolute
-        top 10px
-        left 0
+        margin-top 10px
         .header-msg-box
             height 36px
             width 90%
@@ -165,14 +165,13 @@ export default {
             font-size 18px
             line-height 36px
     Main
-        height calc(100% - 96px)
-        width 100%
-        margin-top 50px
-        padding 10px 0
-        overflow scroll
-        padding-bottom 60px
         box-sizing border-box
-        -webkit-overflow-scrolling touch
+        flex 1
+        flex-shrink 0
+        width 100%
+        padding 10px 0 0 0
+        margin-bottom 10px
+        height calc(100% - 116px)
         .contents-box
             width 90%
             margin 0 auto
@@ -188,7 +187,6 @@ export default {
                     height 120px
                     line-height 120px
             .content-box
-                /*max-height 400px*/
                 background rgba(255, 255, 255, .9)
                 border-radius 4px
                 box-sizing border-box
@@ -266,10 +264,6 @@ export default {
                         -webkit-transform-origin 0 0
                         transform-origin 0 0
     Footer
-        width 100%
-        position absolute
-        bottom 0
-        left 0
         height 50px
         box-shadow 0 -2px 3px $shadow-gray
         background white

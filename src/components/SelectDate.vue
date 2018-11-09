@@ -88,6 +88,7 @@ export default {
         position fixed
         top 0
         left 0
+        z-index 201
         .content-box
             background white
             padding 20px 30px 10px 30px

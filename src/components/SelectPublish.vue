@@ -51,6 +51,7 @@ export default {
     top 0
     left 0
     background white
+    z-index 201
     .content-box
         position absolute
         width 100%

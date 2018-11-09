@@ -131,7 +131,7 @@ export default {
       if (!this.datePicker) {
         this.datePicker = this.$createDatePicker({
           title: '选择日期',
-          min: new Date(2008, 7, 8),
+          min: new Date(1900, 1, 1),
           max: new Date(),
           value: this.value,
           onSelect: this.selectHandle,
