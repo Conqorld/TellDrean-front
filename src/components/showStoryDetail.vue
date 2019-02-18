@@ -2,7 +2,7 @@
     <div class="show-story-detail">
         <div class="header">
             <span class="cancel" @touchstart="cancel">返回</span>
-            <img v-if="isUser" @touchstart="jumpStoryEdit()" class="edit-icon" style="width:20px;height:20px" src="http://p4v45pf9g.bkt.clouddn.com/edit.png">
+            <img v-if="isUser" @touchstart="jumpStoryEdit()" class="edit-icon" style="width:20px;height:20px" :src="editImg">
         </div>
         <cube-scroll ref="scroll">
             <div class="main">
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import editImg from '../assets/imgs/edit.png'
 export default {
   name: 'showStoryDetail',
   data () {
@@ -39,11 +40,7 @@ export default {
       character: null,
       event: null,
       isUser: true,
-      pullDownY: 0,
-      pullDownStyle: '',
-      opacityStyle: '',
-      triggerSurpriseFlag: false,
-      triggerSurprise: false
+      editImg: editImg
     }
   },
   methods: {
@@ -81,7 +78,7 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
 @import "../assets/style/base.styl"
 .show-story-detail
-    background url("http://p4v45pf9g.bkt.clouddn.com/DetailBack2.jpg")
+    background url("../assets/imgs/DetailBack2.jpg")
     background-repeat repeat
     position fixed
     height 100%

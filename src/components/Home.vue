@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="no-more" v-if="thisMonthData.length > 0">已经没有更多了</div>
-                    <div class="no-more thismonth-no-dream" v-if="thisMonthData.length <= 0">这个月还没有做梦哦~</div>
+                    <div class="no-more thismonth-no-dream" v-if="thisMonthData.length <= 0">{{inLogin?'加载中...':"这个月还没有做梦哦"}}~</div>
                 </div>
             </cube-scroll>
         </Main>
@@ -59,7 +59,8 @@ export default {
       maxDate: null,
       minDate: null,
       currentYear: new Date().getFullYear(),
-      currentMouth: new Date().getMonth()
+      currentMouth: new Date().getMonth(),
+      inLogin: true
     }
   },
   components: {
@@ -120,12 +121,16 @@ export default {
         })
     },
     getMonthData (createTime, endTime) {
+      this.inLogin = true
       this.$httpFetch('/tellDream/getStory', {data: {
         createTime: Date.parse(createTime) / 1000,
         endTime: Date.parse(endTime) / 1000
       }})
         .then(data => {
           this.thisMonthData = data
+        })
+        .finally(() => {
+          this.inLogin = false
         })
     },
     getRangeMonth () {
@@ -149,7 +154,7 @@ export default {
     position fixed
     left 0
     top 0
-    background url("http://p4v45pf9g.bkt.clouddn.com/HomeBack.jpg")
+    background url("../assets/imgs/HomeBack.jpg")
     background-size cover
     background-position center
     background-repeat no-repeat

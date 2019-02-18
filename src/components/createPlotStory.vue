@@ -47,7 +47,8 @@ export default {
       character: null,
       background: null,
       datePicker: null,
-      isUser: true
+      isUser: true,
+      btnClock: true
     }
   },
   methods: {
@@ -114,6 +115,10 @@ export default {
         url = '/tellDream/upDateStory'
         msg = '修改成功!'
       }
+      if(!this.btnClock){
+        return false
+      }
+      this.btnClock = false
       this.$httpFetch(url, {
         data: params
       })
@@ -125,6 +130,14 @@ export default {
               this.$router.push({name: 'Home'})
             }, 1000)
           }
+        })
+        .catch(err => {
+          this.$createDialog({
+            type: 'alert',
+            title: err.err,
+            icon: 'cubeic-warm'
+          }).show()
+          this.btnClock = true
         })
     },
     pickDate () {

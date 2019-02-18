@@ -23,6 +23,7 @@
     name: "logIn",
     data() {
       return {
+        btnClock: true,
         model: {
           account: null,
           password: null
@@ -78,6 +79,11 @@
           toast3.show()
           return false
         }
+
+        if(!this.btnClock){
+          return false
+        }
+        this.btnClock = false
         this.$httpFetch('/tellDream/login', {data: {
             account: this.model.account,
             password: md5(md5(this.model.password) + 'pou')
@@ -103,6 +109,7 @@
               type: 'error'
             })
             toast.show()
+            this.btnClock = true
           })
       },
     }
