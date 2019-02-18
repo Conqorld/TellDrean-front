@@ -1,9 +1,9 @@
-import Home from '@/components/Home'
-import createStory from '@/components/createStory'
-import createPlotStory from '@/components/createPlotStory'
-import showStoryDetail from '@/components/showStoryDetail'
-import logIn from '@/components/logIn'
-import register from '@/components/register'
+const Home = () => import('@/components/Home')
+const createStory = () => import('@/components/createStory')
+const createPlotStory = () => import('@/components/createPlotStory')
+const showStoryDetail = () => import('@/components/showStoryDetail')
+const logIn = () => import('@/components/logIn')
+const register = () => import('@/components/register')
 const routes =[
   {
     path: '/',
