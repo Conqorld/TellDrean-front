@@ -13,7 +13,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  if (!Cookie.get('token') && to.name !== 'logIn' && to.name !== 'register') {
+  if (!Cookie.get('token') && (to.name !== 'logIn' || to.name !== 'register')) {
     next('/logIn')
   }else {
     next()
